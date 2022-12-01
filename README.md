@@ -13,7 +13,7 @@ deno cache deps.ts
 ## Run exercises
 
 ```bash
-deno run --allow-read day-1/index.ts
+deno run --allow-read day-1/part-1.ts
 ```
 
 ## Code sanity
