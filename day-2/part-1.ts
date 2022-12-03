@@ -1,11 +1,8 @@
-import { buffer, path } from "../deps.ts";
+import { path } from "../deps.ts";
+import { readLines } from "../utils/fs.ts";
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 const filePath = path.join(__dirname, "input.txt");
-const inputFile = await Deno.open(filePath);
-
-const lines = buffer.readLines(inputFile);
-let iterator = await lines.next();
 
 type Matches = "X" | "Y" | "Z";
 
@@ -38,14 +35,12 @@ const getPointsByResult = (a: Matches, b: Matches) => {
 
 let points = 0;
 
-while (!iterator.done) {
-  const results = iterator.value.split(" ");
+for await (const line of await readLines(filePath)) {
+  const results = line.split(" ");
   const a = normalize(results[0]) as Matches;
   const b = results[1] as Matches;
 
   points += getPointsByResult(b, a) + POINTS_BY_SELECTION[b];
-
-  iterator = await lines.next();
 }
 
 console.log(`Points: ${points}`);

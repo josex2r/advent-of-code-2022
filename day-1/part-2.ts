@@ -1,17 +1,15 @@
-import { buffer, path } from "../deps.ts";
+import { path } from "../deps.ts";
+import { readLines } from "../utils/fs.ts";
 
 const __dirname = path.dirname(path.fromFileUrl(import.meta.url));
 const filePath = path.join(__dirname, "input.txt");
-const inputFile = await Deno.open(filePath);
 
-const lines = buffer.readLines(inputFile);
-let iterator = await lines.next();
 let currCalories = 0;
 let ranking: number[] = [0, 0, 0];
 
-while (!iterator.done) {
-  if (iterator.value.length) {
-    const calories = parseInt(iterator.value);
+for await (const line of await readLines(filePath)) {
+  if (line.length) {
+    const calories = parseInt(line);
 
     currCalories += calories;
   } else {
@@ -23,8 +21,6 @@ while (!iterator.done) {
 
     currCalories = 0;
   }
-
-  iterator = await lines.next();
 }
 
 const totalCalories = ranking.reduce((acc, calories) => acc + calories, 0);
