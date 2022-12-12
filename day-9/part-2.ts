@@ -12,6 +12,13 @@ const getPosition = (x: number, y: number) => `${x}:${y}`;
 
 const visited: Record<string, number> = {};
 
+// render
+const positions: [number, number][][] = [];
+let maxX = 0;
+let minX = 0;
+let maxY = 0;
+let minY = 0;
+
 function moveHead(direction: Direction, head: [number, number]) {
   // Move Head
   if (direction === "L") {
@@ -75,11 +82,24 @@ for await (const line of await readLines(filePath)) {
       moveKnot(direction as Direction, prev, knot);
     });
 
+    // Fill positions
+    positions.push(
+      knots.map((knot) => {
+        maxX = Math.max(knot[0], maxX);
+        minX = Math.min(knot[0], minX);
+        maxY = Math.max(knot[1], maxY);
+        minY = Math.min(knot[1], minY);
+        return [knot[0], knot[1]];
+      }),
+    );
+
     // Register position
     const last = getPosition(...knots[knots.length - 1]);
-
+console.log(last)
     visited[last] = 1;
   });
 }
 
 console.log(Object.keys(visited).length);
+
+// console.log(positions);
